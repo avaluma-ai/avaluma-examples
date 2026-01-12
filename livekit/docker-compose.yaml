@@ -1,5 +1,5 @@
 services:
-  agent-with-local-avatar:
+  livekit-agent-with-avatar:
     build:
       context: .
       dockerfile: Dockerfile
@@ -10,8 +10,7 @@ services:
       - AGENT_NAME=agent_with_local_avatar
     volumes:
       - ./assets:/app/assets:ro
-      - ./bin:/app/.venv/lib/python3.12/site-packages/avaluma_livekit_plugin/local/bin
-      - ./src/agent_with_local_avatar.py:/app/src/agent.py
+      - ./src/agents/agent_with_local_avatar.py:/app/src/agent.py
     # GPU access
     deploy:
       resources:
@@ -20,7 +19,7 @@ services:
             - driver: nvidia
               count: all
               capabilities: [gpu, compute, utility, graphics]
-  local-avatar-for-external-agent:
+  external-agent-with-avatar:
     build:
       context: .
       dockerfile: Dockerfile
@@ -31,8 +30,7 @@ services:
       - AGENT_NAME=local_avatar_for_external_agent
     volumes:
       - ./assets:/app/assets:ro
-      - ./bin:/app/.venv/lib/python3.12/site-packages/avaluma_livekit_plugin/local/bin
-      - ./src/local_avatar_for_external_agent.py:/app/src/agent.py
+      - ./src/agents/local_avatar_for_external_agent.py:/app/src/agent.py
     # GPU access
     deploy:
       resources:

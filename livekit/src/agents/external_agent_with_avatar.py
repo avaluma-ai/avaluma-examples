@@ -1,5 +1,6 @@
 import os
 
+# highlight-next-line
 from avaluma_livekit_plugin import LocalAvatarSession
 from dotenv import load_dotenv
 from livekit.agents import (
@@ -10,6 +11,7 @@ from livekit.agents import (
 
 load_dotenv(".env.local")
 agent_name = os.getenv("AGENT_NAME", "")
+avatar_id = os.getenv("AVATAR_ID", "2025-09-06-Kadda_very_long_DS_v2_release_v5_gcs")
 license_key = os.getenv("LICENSE_KEY", "")
 
 
@@ -19,12 +21,14 @@ async def entrypoint(ctx: JobContext):
         "room": ctx.room.name,
     }
 
+    # highlight-start
     avatar = LocalAvatarSession(
         license_key=license_key,
-        avatar_id="2025-09-06-Kadda_very_long_DS_v2_release_v5_gcs",  # Avatar identifier
+        avatar_id=avatar_id,  # Avatar identifier (for AVATAR_ID.hvia)
         assets_dir=os.path.join(os.path.dirname(__file__), "..", "assets"),
     )
     await avatar.start(room=ctx.room)
+    # highlight-end
 
     await ctx.connect()
 

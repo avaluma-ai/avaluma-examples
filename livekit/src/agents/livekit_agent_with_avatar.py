@@ -1,5 +1,6 @@
 import os
 
+# highlight-next-line
 from avaluma_livekit_plugin import LocalAvatarSession
 from dotenv import load_dotenv
 from livekit.agents import (
@@ -18,6 +19,7 @@ from livekit.plugins.turn_detector.multilingual import MultilingualModel
 
 load_dotenv(".env.local")
 agent_name = os.getenv("AGENT_NAME", "")
+avatar_id = os.getenv("AVATAR_ID", "2025-09-06-Kadda_very_long_DS_v2_release_v5_gcs")
 license_key = os.getenv("AVALUMA_LICENSE_KEY", "")
 
 
@@ -47,15 +49,15 @@ async def entrypoint(ctx: JobContext):
         preemptive_generation=True,
     )
 
+    # highlight-start
     avatar = LocalAvatarSession(
         license_key=license_key,  # Your License Key
-        avatar_id="2025-09-06-Kadda_very_long_DS_v2_release_v5_gcs",  # Avatar identifier (Name of .hvia file)
-        assets_dir=os.path.join(
-            os.path.dirname(__file__), "..", "assets"
-        ),  # Path to the assets directory with .hvia files
+        avatar_id=avatar_id,  # Avatar identifier (Name of .hvia file)
+        assets_dir=os.path.join(os.path.dirname(__file__), "..", "assets"),
     )
     # Start the avatar and wait for it to join
     await avatar.start(agent_session=session, room=ctx.room)
+    # highlight-end
 
     await session.start(
         agent=Assistant(),
@@ -63,6 +65,7 @@ async def entrypoint(ctx: JobContext):
         room_input_options=RoomInputOptions(
             noise_cancellation=noise_cancellation.BVC(),
         ),
+        # highlight-next-line
         room_output_options=RoomOutputOptions(audio_enabled=False),
     )
     await ctx.connect()
