@@ -1,16 +1,14 @@
 services:
   livekit-agent-with-avatar:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: europe-west3-docker.pkg.dev/stable-plasma-427409-e7/avaluma-public/avaluma-livekit-runtime-x68-cu12:latest
     # Environment variables
     env_file:
       - .env.local
     environment:
-      - AGENT_NAME=agent_with_local_avatar
+      - AGENT_NAME=livekit-agent-with-avatar
     volumes:
       - ./assets:/app/assets:ro
-      - ./src/agents/agent_with_local_avatar.py:/app/src/agent.py
+      - ./src/agents/livekit_agent_with_avatar.py:/app/src/agent.py
     # GPU access
     deploy:
       resources:
@@ -20,17 +18,15 @@ services:
               count: all
               capabilities: [gpu, compute, utility, graphics]
   external-agent-with-avatar:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: europe-west3-docker.pkg.dev/stable-plasma-427409-e7/avaluma-public/avaluma-livekit-runtime-x68-cu12:latest
     # Environment variables
     env_file:
       - .env.local
     environment:
-      - AGENT_NAME=local_avatar_for_external_agent
+      - AGENT_NAME=external-agent-with-avatar
     volumes:
       - ./assets:/app/assets:ro
-      - ./src/agents/local_avatar_for_external_agent.py:/app/src/agent.py
+      - ./src/agents/external_agent_with_avatar.py:/app/src/agent.py
     # GPU access
     deploy:
       resources:
@@ -39,3 +35,14 @@ services:
             - driver: nvidia
               count: all
               capabilities: [gpu, compute, utility, graphics]
+
+  test-rtc-input:
+    build:
+      context: .
+      target: python-test-environment
+    env_file:
+      - .env.local
+    volumes:
+      - ./src/tests/test-rtc-input.py:/app/test-rtc-input.py
+      - ./assets/hello_world.mp3:/test_data/hello_world.mp3
+    entrypoint: ["python", "/app/test-rtc-input.py"]

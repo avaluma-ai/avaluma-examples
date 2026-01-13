@@ -1,3 +1,14 @@
+FROM python:3.12-slim AS python-test-environment
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ffmpeg \
+    # Clean up
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip install livekit livekit-api python-dotenv numpy
+
+# ---
+
 FROM nvidia/cuda:12.8.0-cudnn-runtime-ubuntu24.04 AS runtime
 
 # Prevent interactive prompts
@@ -41,7 +52,7 @@ WORKDIR /app
 # Install dependencies
 COPY pyproject.toml .
 RUN uv sync
-RUN uv pip install git+https://github.com/avaluma-ai/avaluma-livekit-plugin.git
+RUN uv pip install git+https://github.com/avaluma-ai/avaluma-livekit-plugin.git@dev
 
 # Pre-download any ML models or files the agent needs
 # This ensures the container is ready to run immediately without downloading
