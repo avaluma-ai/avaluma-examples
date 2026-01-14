@@ -6,6 +6,7 @@ services:
       - .env.local
     environment:
       - AGENT_NAME=livekit-agent-with-avatar
+      - AVATAR_ID=2025-09-06-Kadda_very_long_DS_v2_release_v5_gcs
     volumes:
       - ./assets:/app/assets:ro
       - ./src/agents/livekit_agent_with_avatar.py:/app/src/agent.py
@@ -24,6 +25,7 @@ services:
       - .env.local
     environment:
       - AGENT_NAME=external-agent-with-avatar
+      - AVATAR_ID=2025-09-06-Kadda_very_long_DS_v2_release_v5_gcs
     volumes:
       - ./assets:/app/assets:ro
       - ./src/agents/external_agent_with_avatar.py:/app/src/agent.py
