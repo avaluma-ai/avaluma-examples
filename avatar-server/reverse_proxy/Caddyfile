@@ -1,0 +1,13 @@
+api.avaluma.ai {
+    reverse_proxy avaluma-avatar-server:8080
+
+    @css {
+        path *.css
+    }
+    header @css Content-Type "text/css; charset=utf-8"
+
+    @js {
+        path *.js
+    }
+    header @js Content-Type "application/javascript; charset=utf-8"
+}
