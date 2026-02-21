@@ -6,9 +6,6 @@ services:
     ports:
       # not necessary when using reverse proxy
       - 8080:8080
-    environment:
-      # change this to the Public IP of the server or domain name when using reverse proxy
-      - API_SERVER_HOST=127.0.0.1
     volumes:
       - ./assets/avatars:/app/assets/avatars # folder for .hvia-files
     # GPU access

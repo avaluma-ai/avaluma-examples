@@ -1,0 +1,14 @@
+services:
+  livekit-agent-1:
+    build: .
+    env_file:
+      - .env.local
+    environment:
+      # Importent when deploying multiple agents on the same livekit projects
+      - AGENT_NAME=agent-1
+    volumes:
+      - livekit_plugin_cache:/root/.cache
+      - ./agents/agent-1.py:/app/src/agent.py
+
+volumes:
+  livekit_plugin_cache:
