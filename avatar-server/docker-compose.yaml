@@ -1,0 +1,25 @@
+services:
+  avaluma-avatar-server:
+    image: ghcr.io/avaluma-ai/avaluma-avatar-server:latest
+    pull_policy: always # update on restart
+    restart: unless-stopped
+    ports:
+      # not necessary when using reverse proxy
+      - 8080:8080
+    volumes:
+      - ./assets/avatars:/app/assets/avatars # folder for .hvia-files
+    # GPU access
+    networks:
+      - avaluma-net
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu, compute, utility, graphics]
+
+networks:
+  avaluma-net:
+    name: avaluma-net
+    driver: bridge

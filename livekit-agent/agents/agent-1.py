@@ -1,7 +1,7 @@
 import os
 
 # highlight-next-line
-from avaluma_livekit_plugin import LocalAvatarSession
+from avaluma_livekit_plugin import AvatarSession
 from dotenv import load_dotenv
 from livekit.agents import (
     Agent,
@@ -18,9 +18,10 @@ from livekit.plugins import noise_cancellation, silero
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
 
 load_dotenv(".env.local")
-agent_name = os.getenv("AGENT_NAME", "")
-avatar_id = os.getenv("AVATAR_ID", "2025-09-06-Kadda_very_long_DS_v2_release_v5_gcs")
+agent_name = "agent-1"
+avatar_id = "260218-Avaluma_Avatar_Kadda_v1"
 license_key = os.getenv("AVALUMA_LICENSE_KEY", "")
+avatar_server_url = os.getenv("AVATAR_SERVER_URL", "https://api.avaluma.ai")
 
 
 class Assistant(Agent):
@@ -49,11 +50,14 @@ async def entrypoint(ctx: JobContext):
         preemptive_generation=True,
     )
 
+    if license_key is None:
+        raise ValueError("AVALUMA_LICENSE_KEY is not set")
+
     # highlight-start
-    avatar = LocalAvatarSession(
+    avatar = AvatarSession(
         license_key=license_key,  # Your License Key
         avatar_id=avatar_id,  # Avatar identifier (Name of .hvia file)
-        assets_dir=os.path.join(os.path.dirname(__file__), "..", "assets"),
+        avatar_server_url=avatar_server_url,
     )
     # Start the avatar and wait for it to join
     await avatar.start(agent_session=session, room=ctx.room)
@@ -66,7 +70,7 @@ async def entrypoint(ctx: JobContext):
             noise_cancellation=noise_cancellation.BVC(),
         ),
         # highlight-next-line
-        room_output_options=RoomOutputOptions(audio_enabled=False),
+        # room_output_options=RoomOutputOptions(audio_enabled=False),
     )
     await ctx.connect()
 
@@ -80,7 +84,6 @@ if __name__ == "__main__":
         WorkerOptions(
             entrypoint,
             prewarm_fnc=prewarm,
-            job_memory_warn_mb=4096,
             agent_name=agent_name,
         )
     )

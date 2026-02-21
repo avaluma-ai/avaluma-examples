@@ -1,7 +1,7 @@
 [project]
-name = "avaluma-livekit-examples"
+name = "avaluma-livekit-agent"
 version = "1.0.0"
-description = "Simple examples for LiveKit Agents with Avaluma Avatar"
+description = "Simple example for LiveKit Agents with Avaluma Avatar"
 requires-python = ">=3.12"
 
 dependencies = [
@@ -9,4 +9,5 @@ dependencies = [
     "livekit-agents[silero,turn-detector]~=1.2",
     "livekit-plugins-noise-cancellation~=0.2",
     "python-dotenv",
+    "avaluma-livekit-plugin @ git+https://github.com/avaluma-ai/avaluma-livekit-plugin.git"
 ]
