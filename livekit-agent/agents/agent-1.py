@@ -19,7 +19,7 @@ from livekit.plugins.turn_detector.multilingual import MultilingualModel
 
 load_dotenv(".env.local")
 agent_name = "agent-1"
-avatar_id = "260218-Avaluma_Avatar_Kadda_v1"
+avatar_id = "260218-Avaluma_Avatar_Kadda_v5"
 license_key = os.getenv("AVALUMA_LICENSE_KEY", "")
 avatar_server_url = os.getenv("AVATAR_SERVER_URL", "https://api.avaluma.ai")
 
