@@ -1,6 +1,7 @@
 services:
   livekit-agent-1:
     build: .
+    restart: unless-stopped
     env_file:
       - .env.local
     environment:
@@ -9,6 +10,7 @@ services:
     volumes:
       - livekit_plugin_cache:/root/.cache
       - ./agents/agent-1.py:/app/src/agent.py
+    # network_mode: host
 
 volumes:
   livekit_plugin_cache:

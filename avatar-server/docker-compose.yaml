@@ -3,6 +3,8 @@ services:
     image: ghcr.io/avaluma-ai/avaluma-avatar-server:latest
     pull_policy: always # update on restart
     restart: unless-stopped
+    environment:
+      - API_UTILS_PWD="CHANGE_THIS"
     ports:
       # not necessary when using reverse proxy
       - 8080:8080
