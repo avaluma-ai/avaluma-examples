@@ -1,3 +1,4 @@
+# Change this to your own domain name
 api.avaluma.ai {
     reverse_proxy avaluma-avatar-server:8080
 

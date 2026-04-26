@@ -9,7 +9,6 @@ from livekit.agents import (
     JobContext,
     JobProcess,
     RoomInputOptions,
-    RoomOutputOptions,
     WorkerOptions,
     cli,
     inference,
@@ -69,8 +68,6 @@ async def entrypoint(ctx: JobContext):
         room_input_options=RoomInputOptions(
             noise_cancellation=noise_cancellation.BVC(),
         ),
-        # highlight-next-line
-        # room_output_options=RoomOutputOptions(audio_enabled=False),
     )
     await ctx.connect()
 

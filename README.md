@@ -7,7 +7,7 @@ A collection of examples showing how to integrate **Avaluma AI Avatars** into yo
 | Example | Description |
 |---|---|
 | [`avatar-server`](./avatar-server/) | Deploy the Avaluma Avatar Server with Docker and an optional Caddy reverse proxy. Supports multiple simultaneous avatar sessions with GPU acceleration. |
-| [`livekit-agent`](./livekit-agent/) | A LiveKit Agent that drives an Avaluma avatar with voice AI — including speech-to-text, an LLM, and text-to-speech. |
+| [`livekit-agent`](./livekit-agent/) | LiveKit Agents that drive an Avaluma avatar. Includes a full voice AI pipeline (STT → LLM → TTS) and an example of streaming audio directly to the avatar from an external source via DataStream. |
 
 ## Architecture Overview
 

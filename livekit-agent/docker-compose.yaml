@@ -9,7 +9,20 @@ services:
       - AGENT_NAME=agent-1
     volumes:
       - livekit_plugin_cache:/root/.cache
-      - ./agents/agent-1.py:/app/src/agent.py
+      - ./agents/1-agent-with-livekit-inference/agent-1.py:/app/src/agent.py
+  livekit-agent-2:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - .env.local
+    environment:
+      # Importent when deploying multiple agents on the same livekit projects
+      - AGENT_NAME=agent-2
+    volumes:
+      - livekit_plugin_cache:/root/.cache
+      - ./agents/2-agent-with-external-audio/agent-2.py:/app/src/agent.py
+      - ./agents/2-agent-with-external-audio/external_audio_sender.py:/app/src/external_audio_sender.py
+      - ./agents/2-agent-with-external-audio/assets:/app/src/assets
     # network_mode: host
 
 volumes:

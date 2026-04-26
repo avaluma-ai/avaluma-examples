@@ -5,7 +5,9 @@ Hosts the Avaluma Avatar Server using Docker. It renders photorealistic AI avata
 ## Prerequisites
 
 - [Docker](https://docs.docker.com/get-docker/) & Docker Compose
-- NVIDIA GPU with drivers installed
+- NVIDIA GPU with CUDA 12, OpenGL support, and NVIDIA drivers (including graphics drivers)
+  - Minimum **6 GB VRAM** (each avatar requires ~2.5 GB)
+  - Tested on Ampere, Ada Lovelace, and Blackwell architectures
 - [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html)
 - An Avaluma license key and at least one `.hvia` avatar file
 
@@ -55,14 +57,7 @@ For production deployments, use the included Caddy reverse proxy to terminate TL
 
 ### 1. Update the Domain
 
-Edit `reverse_proxy/Caddyfile` and replace `api.avaluma.ai` with your own domain:
-
-```
-your.domain.com {
-    reverse_proxy avaluma-avatar-server:8080
-    ...
-}
-```
+Edit `reverse_proxy/Caddyfile` and replace `api.avaluma.ai` with your own domain.
 
 ### 2. Start the Proxy
 
@@ -83,6 +78,6 @@ Caddy will automatically obtain and renew a TLS certificate for your domain.
 
 ## Notes
 
-- The server requires an NVIDIA GPU. The `deploy.resources` block in `docker-compose.yaml` configures GPU access.
+- The server requires an NVIDIA GPU with CUDA 12 and at least 6 GB VRAM. The `deploy.resources` block in `docker-compose.yaml` configures GPU access.
 - Avatar files are mounted from `./assets/avatars` into the container at `/app/assets/avatars`.
 - The image is always pulled on container restart (`pull_policy: always`) to stay up to date.
