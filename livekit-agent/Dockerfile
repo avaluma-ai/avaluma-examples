@@ -20,5 +20,6 @@ RUN uv sync --locked
 
 # Run the application using UV
 # UV will activate the virtual environment and run the agent.
+# "download-files" fetches the model files of all installed LiveKit plugins.
 # The "start" command tells the worker to connect to LiveKit and begin waiting for jobs.
-ENTRYPOINT ["/bin/sh", "-c", "uv run python src/agent.py download-files && uv run python src/agent.py start"]
+ENTRYPOINT ["/bin/sh", "-c", "uv run -m livekit.agents download-files && uv run python src/agent.py start"]
