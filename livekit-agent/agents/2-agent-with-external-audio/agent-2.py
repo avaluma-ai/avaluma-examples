@@ -2,7 +2,7 @@ import asyncio
 import os
 
 import external_audio_sender
-from avaluma_livekit_plugin import AvatarSession
+from livekit.plugins.avaluma import AvatarSession
 from dotenv import load_dotenv
 from livekit.agents import (
     Agent,
@@ -36,7 +36,7 @@ async def entrypoint(ctx: JobContext):
 
     session = AgentSession()
 
-    if license_key is None:
+    if not license_key:
         raise ValueError("AVALUMA_LICENSE_KEY is not set")
 
     avatar = AvatarSession(

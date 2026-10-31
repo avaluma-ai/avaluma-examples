@@ -4,8 +4,6 @@ services:
     pull_policy: always # update on restart
     restart: unless-stopped
     environment:
-      # change this to the Public IP of the server or domain name when using reverse proxy
-      - API_SERVER_HOST=api.avaluma.ai
       - API_UTILS_PWD=CHANGE_THIS
     ports:
       # not necessary when using reverse proxy

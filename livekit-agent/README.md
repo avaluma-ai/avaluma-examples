@@ -55,6 +55,8 @@ LIVEKIT_API_KEY=""         # API key from your LiveKit project
 LIVEKIT_API_SECRET=""      # API secret from your LiveKit project
 ```
 
+Without explicit arguments the plugin falls back to `AVALUMA_API_KEY` and `AVALUMA_API_URL`; these examples read `AVALUMA_LICENSE_KEY` and `AVATAR_SERVER_URL` and pass them to `AvatarSession` explicitly.
+
 ### 2. Configure the Avatar ID
 
 Set your avatar ID in the agent file. The value must match the `.hvia` filename without the extension.
@@ -87,8 +89,6 @@ livekit-agent-2:
   build: .
   env_file:
     - .env.local
-  environment:
-    - AGENT_NAME=agent-2
   volumes:
     - livekit_plugin_cache:/root/.cache
     - ./agents/2-agent-with-external-audio/agent-2.py:/app/src/agent.py
@@ -109,7 +109,7 @@ Once all services are running (avatar server, LiveKit server, and the agent), yo
 
 1. Open the [LiveKit Agent Playground](https://agents-playground.livekit.io)
 2. Select your LiveKit Cloud project or enter your server credentials
-3. Enter the `AGENT_NAME` (e.g. `agent-1`)
+3. Enter the agent name, i.e. the `agent_name` variable in the agent script (e.g. `agent-1`)
 4. Click **Connect**
 
 > If the agent doesn't respond after changing the agent name, reload the page and reconnect.
@@ -118,7 +118,7 @@ Once all services are running (avatar server, LiveKit server, and the agent), yo
 
 1. Create a directory under `agents/` with your agent script.
 2. Add a service to `docker-compose.yaml`, mounting the script to `/app/src/agent.py`.
-3. Set a unique `AGENT_NAME` — this must match the `agent_name` variable inside the script.
+3. Set a unique `agent_name` variable inside the script; clients dispatch the agent by this name.
 
 ## Configuration
 
@@ -129,18 +129,17 @@ Once all services are running (avatar server, LiveKit server, and the agent), yo
 | `LIVEKIT_API_KEY` | LiveKit project API key |
 | `LIVEKIT_API_SECRET` | LiveKit project API secret |
 | `AVATAR_SERVER_URL` | URL of the running avatar server (default: `https://api.avaluma.ai`) |
-| `AGENT_NAME` | Unique name for this agent worker (default: `agent-1`) |
 
 ## Dependencies
 
-Managed by [uv](https://github.com/astral-sh/uv) via `pyproject.toml`:
+Managed by [uv](https://github.com/astral-sh/uv) via `pyproject.toml`. `uv.lock` pins the exact versions, and the Docker build installs them with `uv sync --locked`. After changing `pyproject.toml`, run `uv lock` to update `uv.lock`:
 
 | Package | Purpose |
 |---|---|
 | `livekit` | LiveKit RTC SDK (room, track, DataStream) |
 | `livekit-agents` | Core agent framework |
 | `livekit-plugins-noise-cancellation` | Background noise suppression (BVC) |
-| `avaluma-livekit-plugin` | Avaluma avatar integration |
+| `livekit-plugins-avaluma` | Avaluma avatar integration (`livekit.plugins.avaluma`) |
 | `silero` | Voice activity detection (VAD) |
 | `turn-detector` | Multilingual end-of-turn detection |
 | `python-dotenv` | Loads `.env.local` credentials |

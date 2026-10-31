@@ -6,7 +6,9 @@ architecture: [README.md](README.md).
 - [avatar-server/](avatar-server/README.md): run the Avaluma Avatar Server
   (`ghcr.io/avaluma-ai/avaluma-avatar-server`) with Docker, optionally behind Caddy.
 - [livekit-agent/](livekit-agent/README.md): two LiveKit agents that drive an avatar through
-  `avaluma-livekit-plugin`.
+  `livekit-plugins-avaluma` (module `livekit.plugins.avaluma`), pinned to a commit of
+  [avaluma-livekit-plugin](https://github.com/avaluma-ai/avaluma-livekit-plugin) in
+  `livekit-agent/pyproject.toml`; exact versions in `livekit-agent/uv.lock`.
 
 This repository is **public**. Never commit license keys, API keys, internal hostnames or
 internal paths; `.env*` files stay local. Write for customers: every example must work with
@@ -26,6 +28,18 @@ docker compose -f avatar-server/docker-compose.yaml config -q
 docker compose -f avatar-server/reverse_proxy/docker-compose.yaml config -q
 python3 -m py_compile livekit-agent/agents/*/*.py
 ```
+
+Import test: installs the locked dependencies and imports both agents without starting them, so a
+renamed package or module fails here (`py_compile` does not notice):
+
+```bash
+(cd livekit-agent && uv sync --locked && for f in agents/*/agent-*.py; do
+  PYTHONPATH="$(dirname "$f")" uv run python -c "import runpy, sys; runpy.run_path(sys.argv[1])" "$f" || exit 1
+done)
+```
+
+After changing `livekit-agent/pyproject.toml`, run `uv lock` there and commit `uv.lock`;
+`uv sync --locked` (also in the Dockerfile) fails on a stale lock.
 
 `docker compose config` for `livekit-agent/` needs a `.env.local` there (copy `.env.example`).
 
