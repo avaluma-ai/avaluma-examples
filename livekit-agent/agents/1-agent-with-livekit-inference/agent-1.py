@@ -5,16 +5,15 @@ from livekit.plugins.avaluma import AvatarSession
 from dotenv import load_dotenv
 from livekit.agents import (
     Agent,
+    AgentServer,
     AgentSession,
     JobContext,
-    JobProcess,
-    RoomInputOptions,
-    WorkerOptions,
+    TurnHandlingOptions,
     cli,
     inference,
+    room_io,
 )
-from livekit.plugins import noise_cancellation, silero
-from livekit.plugins.turn_detector.multilingual import MultilingualModel
+from livekit.plugins import noise_cancellation
 
 load_dotenv(".env.local")
 agent_name = "agent-1"
@@ -33,6 +32,10 @@ class Assistant(Agent):
         )
 
 
+server = AgentServer()
+
+
+@server.rtc_session(agent_name=agent_name)
 async def entrypoint(ctx: JobContext):
     ctx.log_context_fields = {
         "room": ctx.room.name,
@@ -44,9 +47,11 @@ async def entrypoint(ctx: JobContext):
         tts=inference.TTS(
             model="cartesia/sonic-3", voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc"
         ),
-        turn_detection=MultilingualModel(),
-        vad=ctx.proc.userdata["vad"],
-        preemptive_generation=True,
+        # VAD: AgentSession uses the bundled Silero VAD by default
+        turn_handling=TurnHandlingOptions(
+            turn_detection=inference.TurnDetector(),
+            preemptive_generation={"enabled": True},
+        ),
     )
 
     if not license_key:
@@ -65,22 +70,14 @@ async def entrypoint(ctx: JobContext):
     await session.start(
         agent=Assistant(),
         room=ctx.room,
-        room_input_options=RoomInputOptions(
-            noise_cancellation=noise_cancellation.BVC(),
+        room_options=room_io.RoomOptions(
+            audio_input=room_io.AudioInputOptions(
+                noise_cancellation=noise_cancellation.BVC(),
+            ),
         ),
     )
     await ctx.connect()
 
 
-def prewarm(proc: JobProcess):
-    proc.userdata["vad"] = silero.VAD.load()
-
-
 if __name__ == "__main__":
-    cli.run_app(
-        WorkerOptions(
-            entrypoint,
-            prewarm_fnc=prewarm,
-            agent_name=agent_name,
-        )
-    )
+    cli.run_app(server)

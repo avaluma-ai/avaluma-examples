@@ -6,9 +6,9 @@ from livekit.plugins.avaluma import AvatarSession
 from dotenv import load_dotenv
 from livekit.agents import (
     Agent,
+    AgentServer,
     AgentSession,
     JobContext,
-    WorkerOptions,
     cli,
 )
 
@@ -29,6 +29,10 @@ class Assistant(Agent):
         )
 
 
+server = AgentServer()
+
+
+@server.rtc_session(agent_name=agent_name)
 async def entrypoint(ctx: JobContext):
     ctx.log_context_fields = {
         "room": ctx.room.name,
@@ -59,9 +63,4 @@ async def entrypoint(ctx: JobContext):
 
 
 if __name__ == "__main__":
-    cli.run_app(
-        WorkerOptions(
-            entrypoint,
-            agent_name=agent_name,
-        )
-    )
+    cli.run_app(server)

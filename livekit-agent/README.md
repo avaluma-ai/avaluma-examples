@@ -137,9 +137,7 @@ Managed by [uv](https://github.com/astral-sh/uv) via `pyproject.toml`. `uv.lock`
 | Package | Purpose |
 |---|---|
 | `livekit` | LiveKit RTC SDK (room, track, DataStream) |
-| `livekit-agents` | Core agent framework |
+| `livekit-agents` | Core agent framework, incl. LiveKit Inference, turn detector and Silero VAD |
 | `livekit-plugins-noise-cancellation` | Background noise suppression (BVC) |
 | `livekit-plugins-avaluma` | Avaluma avatar integration (`livekit.plugins.avaluma`) |
-| `silero` | Voice activity detection (VAD) |
-| `turn-detector` | Multilingual end-of-turn detection |
 | `python-dotenv` | Loads `.env.local` credentials |
