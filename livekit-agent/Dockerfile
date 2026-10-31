@@ -14,9 +14,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Set working directory
 WORKDIR /app
 
-# Install dependencies
-COPY pyproject.toml .
-RUN uv sync
+# Install the locked dependencies; --locked fails if uv.lock is out of date
+COPY pyproject.toml uv.lock ./
+RUN uv sync --locked
 
 # Run the application using UV
 # UV will activate the virtual environment and run the agent.

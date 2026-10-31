@@ -9,5 +9,5 @@ dependencies = [
     "livekit-agents[silero,turn-detector]~=1.2",
     "livekit-plugins-noise-cancellation~=0.2",
     "python-dotenv",
-    "avaluma-livekit-plugin @ git+https://github.com/avaluma-ai/avaluma-livekit-plugin.git"
+    "livekit-plugins-avaluma @ git+https://github.com/avaluma-ai/avaluma-livekit-plugin@cea612d1fc8d67d9aca715784fea488fbc2360f4",
 ]
